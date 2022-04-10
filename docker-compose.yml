@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  web:
+    build: ./web
+    ports:
+      - 3000:3000
+  backend:
+    build: ./backend
+    ports:
+      - 8095:8095
+    volumes:
+      - /mnt:/mnt
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+  mysql:
+    build: ./mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: file_manager_system
+      MYSQL_ROOT_PASSWORD: tagsystem
+      MYSQL_USER: tagsystem
+      MYSQL_PASSWORD: tagsystem
+    ports:
+      - 3306:3306
+    command:
+      --lower_case_table_names=1
+      --default-authentication-plugin=mysql_native_password
+      --secure-file-priv=
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    healthcheck:
+      test: "mysql $$MYSQL_DATABASE -u$$MYSQL_USER -p$$MYSQL_PASSWORD -e 'SELECT 1;'"
+      interval: 20s
+      timeout: 10s
+      retries: 5
+  redis:
+    image: redis
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - 6379:6379
