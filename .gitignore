@@ -3,6 +3,7 @@
 # dependencies
 /web/node_modules
 /web/.pnp
+/mysql/data
 .pnp.js
 
 # testing
