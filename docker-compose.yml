@@ -5,7 +5,7 @@ services:
     ports:
       - 3000:3000
   backend:
-    build: ./backend
+    image: goldensundd/tagsystem-backend:latest
     ports:
       - 8095:8095
     volumes:
