@@ -1,13 +1,5 @@
 version: "3.9"
 services:
-  nginx:
-    depends_on:
-      - web
-      - backend
-    restart: always
-    build: ./nginx
-    ports:
-      - "8088:80"
   web:
     image: goldensundd/tagsystem-web:latest
     ports:
